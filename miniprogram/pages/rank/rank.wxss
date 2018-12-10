@@ -1,0 +1,27 @@
+
+.background{
+  z-index: -1;
+  position: fixed;
+  width:100%;
+  height:100%;
+}
+
+.wrap{
+  padding: 20rpx;
+  margin: 20rpx 0;
+  /* background-color: #fff;  */
+  border: 3rpx solid #D2E9FF;
+  border-radius: 50rpx;
+  display: flex;
+  align-items: center;
+  /* justify-content: space-around */
+}
+.index{
+  font-size: 30px;
+  color:#d3a4ff;
+}
+.text{
+  margin-left: 100rpx;
+  color:#D2E9FF;
+  font-size:35rpx;
+}

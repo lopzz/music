@@ -1,0 +1,23 @@
+<view>
+  <!--背景图 -->
+  <image  class="background" src="https://6c69-li-1257993047.tcb.qcloud.la/image/index/background.png?sign=f27b4dd1d7ac5b2e9babd25acbf01772&t=1541493678">
+  </image>
+</view>
+<!-- 输入框 -->
+<view class='wrap'>
+  <input class='input' bindinput='bindinput' bindfocus='bindfocus' bindblur='bindblur'confirm-type='search' bindconfirm='bindconfirm'></input>
+  <view class='view-search'style="background-color:{{isSearch?'rgb(154, 84, 120)':'white'}}">
+    <image class='image-search'src="{{isSearch?'/image/search/searching.png':'/image/search/search.png'}}"bindtap='tapSearch'></image>
+  </view>
+</view>
+<!--下拉列表-->
+<view class='down'>
+  
+</view>
+<!-- 搜索结果 -->
+<view wx:for='{{result}}' class='view-result' wx:key='id'>
+  <view class="introduce" bindtap='tapPlay' data-index='{{index}}'>
+    <view>{{item.name}}</view>
+    <view class='singer'>{{item.artists[0].name}}</view>
+  </view>
+</view>

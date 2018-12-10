@@ -1,0 +1,55 @@
+ <wxs module="foo">
+ module.exports = {
+    toStr: function(n){
+      n = Math.floor(n)
+      return n<10 ? "0"+n : ""+n
+    }
+ }
+ </wxs>
+
+<view class='container'>
+  <!-- 背景图 -->
+  <image class='image-background1' src='{{song.al.picUrl}}' mode='aspectFill'></image>
+  <!-- 歌词 -->
+  <scroll-view class='scroll-lrc' scroll-y="true" 
+  scroll-top="500"
+      scroll-into-view="{{currentLrc}}" scroll-with-animation='true'>
+    <view class='{{currentLrc === "el-"+index?"PaleVioletRed":""}}' id="el-{{index}}" wx:for="{{lrc}}" wx:key="{{index}}">{{lrc[index]}}</view>
+  </scroll-view>
+
+  <!-- 进度条 -->
+  <view class='slider'>
+    <slider  bindchanging="changing" bindchange="change" value="{{current}}" min='0' max='{{duration}}'  activeColor='PaleVioletRed' backgroundColor='white' block-size='20' step='1' style='color:red'></slider>
+    <text class='now'>{{foo.toStr( current/60 )}}:{{foo.toStr( current%60 )}}</text>
+  <text class='duration'>{{foo.toStr( duration/60 )}}:{{foo.toStr( duration%60 )}}</text>
+  </view>
+
+  <!--播放控制按钮-->
+  <view class='button'>
+  <!-- 播放模式 -->
+        <view  bindtap='setPlayMode'  bindtouchstart='ripple' data-image="set-mode">
+        <image class="playMode" hidden="{{!(playMode=='listLoop')}}" src="/image/button/listLoop.png" ><view class="ripple" style="{{rippleStylePlayMode}}" ></view></image>
+        <image class="playMode" hidden="{{!(playMode=='singleLoop')}}" src="/image/button/singleLoop.png" ><view class="ripple" style="{{rippleStylePlayMode}}" ></view></image>
+        <image class="playMode" hidden="{{!(playMode=='random')}}" src="/image/button/random.png" ><view class="ripple" style="{{rippleStylePlayMode}}" ></view></image>
+        </view>
+
+    
+    <!-- <image class='playMode' src='/image/button/circle.png' bindtap=''></image> -->
+    <image class='previous' src='/image/button/previous.png' bindtap='previous' bindtouchstart='ripple'  data-image="previous"><view class="ripple" style="{{rippleStyleprevious}}" ></view></image>
+    <image class='playOrPause' src="{{flag==1?'/image/button/pause.png':'/image/button/play.png'}}" bindtap='playOrPause' bindtouchstart='ripple'  data-image="playOrPause">
+    <view class="ripple" style="{{rippleStyleplayOrPause}}" ></view></image>
+    <image class='next' src='/image/button/next.png'   bindtap='next' bindtouchstart='ripple'  data-image="next"><view class="ripple" style="{{rippleStylenext}}" ></view></image>
+    <image class='more' src='/image/button/more.png' bindtap='setDown' bindtouchstart='ripple'  data-image="more"><view class="ripple" style="{{rippleStylemore}}" ></view></image>
+  </view>
+
+      <!-- 专辑 -->
+      <view class='album'>
+        <image class='image-album rotation' src='{{song.al.picUrl}}' mode='aspectFill' style="animation-play-state:{{flag ? 'running':'paused'}}"></image>
+      </view>
+      <view class='view-background'>
+        <image class='image-background2' src='{{song.al.picUrl}}' mode='bottom'></image>
+      </view>
+      <view class='collect' bindtap='collect'>
+        <image class='collection' src="{{collected==1?'/image/button/collected.png':'/image/button/collect.png'}}"></image>
+      </view>
+</view>

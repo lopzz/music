@@ -1,0 +1,65 @@
+.wrap{
+  width: 750rpx;
+  height: 81rpx;
+  position:relative;
+  padding-bottom:35rpx; 
+}
+.input{
+  width: 750rpx;
+  height: 80rpx;
+  background-color: white;
+  border-radius:30rpx;
+  position: absolute;
+  z-index:0;
+  left: 0;
+  top:0;
+}
+.view-search{
+  width: 100rpx;
+  height: 80rpx;
+  background-color:rgb(154, 84, 120);
+  border-radius:30rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  z-index:1;
+  top: 0;
+  right: 0;
+}
+.image-search{
+  width: 50rpx;
+  height:50rpx;
+}
+.background{
+  z-index: -1;
+  position: fixed;
+  width:100%;
+  height:100%;
+}
+.background::after{
+   content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.3);  
+}
+.introduce{
+  width: 100%;
+  height: 120rpx;
+  font-size: 35rpx;
+  color: #D2E9FF;
+  text-indent: 50rpx;/*文字缩进*/
+  margin-bottom: 30rpx;
+  border-bottom: 1px solid rgb(231, 227, 227);
+  overflow: hidden;
+}
+.singer{
+  font-size: 30rpx;
+  margin-top:10rpx;
+  margin-bototm:30rpx;
+}
+
+

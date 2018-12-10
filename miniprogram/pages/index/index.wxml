@@ -1,0 +1,23 @@
+
+<!-- 背景图 -->
+<view>
+    <image class="background" src="https://6c69-li-1257993047.tcb.qcloud.la/image/index/background.png?sign=f27b4dd1d7ac5b2e9babd25acbf01772&t=1541493678"></image></view>
+
+
+<view class="main">
+
+<!-- ①功能按钮 -->
+<view >
+      <image class="myMusic" src="/image/mainFunc/myMusic.png" catchtap="goMyMusic" data-view="1"> </image>
+      <image class="rankList" src="https://6c69-li-1257993047.tcb.qcloud.la/image/mainFunc/rankList.png?sign=296dd53d33acabec29dbe8a15f4461d8&t=1541494265" catchtap="goRankList" data-view="2"></image>
+      <image class="search" src="/image/mainFunc/search.png" catchtap="goSearch" data-view="3"></image>
+</view>
+
+
+</view>
+
+
+
+
+
+

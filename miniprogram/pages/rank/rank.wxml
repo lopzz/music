@@ -1,0 +1,12 @@
+<view>
+    <image  class="background" src="https://6c69-li-1257993047.tcb.qcloud.la/image/index/background.png?sign=f27b4dd1d7ac5b2e9babd25acbf01772&t=1541493678"></image>
+    </view>
+
+
+<view wx:for="{{ type }}" class='wrap' wx:for-item="item"
+wx:for-index="index" wx:key="index" bindtap='tap' data-id='{{index}}' >
+  <text class='index'>{{index+1}}.</text>
+  <text class='text'> {{ item[index] }} </text>
+
+</view>
+
