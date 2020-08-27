@@ -8,9 +8,10 @@
 
 <!-- ①功能按钮 -->
 <view >
-      <image class="myMusic" src="/image/mainFunc/myMusic.png" catchtap="goMyMusic" data-view="1"> </image>
-      <image class="rankList" src="https://6c69-li-1257993047.tcb.qcloud.la/image/mainFunc/rankList.png?sign=296dd53d33acabec29dbe8a15f4461d8&t=1541494265" catchtap="goRankList" data-view="2"></image>
-      <image class="search" src="/image/mainFunc/search.png" catchtap="goSearch" data-view="3"></image>
+      <image class="myMusic" src="/image/mainFunc/myMusic.png" catchtap="goMyMusic" > </image>
+      <image class="rankList" src="/image/mainFunc/rankList.png" catchtap="goRankList" ></image>
+      <image class="search" src="/image/mainFunc/search.png" catchtap="goSearch"></image>
+      <image class="play" src="/image/button/curSong.png" catchtap="goPlay" ></image>
 </view>
 
 

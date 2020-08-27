@@ -6,6 +6,10 @@
   height:100%;
 }
 
+.block{
+  height: 20rpx;
+}
+
 .wrap{
   padding: 20rpx;
   margin: 20rpx 0;
@@ -24,4 +28,11 @@
   margin-left: 100rpx;
   color:#D2E9FF;
   font-size:35rpx;
+}
+.play{
+  position: fixed;
+  bottom:50rpx;
+  right: 50rpx;
+  width: 150rpx;
+  height: 150rpx;
 }

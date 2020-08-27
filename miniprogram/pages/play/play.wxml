@@ -19,27 +19,26 @@
 
   <!-- 进度条 -->
   <view class='slider'>
-    <slider  bindchanging="changing" bindchange="change" value="{{current}}" min='0' max='{{duration}}'  activeColor='PaleVioletRed' backgroundColor='white' block-size='20' step='1' style='color:red'></slider>
+    <slider  bindchanging="changing" bindchange="change" bindtouchstart='ripple'  bindtouchend='ripple' data-image="slider" value="{{current}}" min='0' max='{{duration}}'  activeColor='PaleVioletRed' backgroundColor='white' block-size='20' step='1' style='color:red'  catchtap='mouse'></slider>
     <text class='now'>{{foo.toStr( current/60 )}}:{{foo.toStr( current%60 )}}</text>
   <text class='duration'>{{foo.toStr( duration/60 )}}:{{foo.toStr( duration%60 )}}</text>
   </view>
 
+
   <!--播放控制按钮-->
   <view class='button'>
   <!-- 播放模式 -->
-        <view  bindtap='setPlayMode'  bindtouchstart='ripple' data-image="set-mode">
-        <image class="playMode" hidden="{{!(playMode=='listLoop')}}" src="/image/button/listLoop.png" ><view class="ripple" style="{{rippleStylePlayMode}}" ></view></image>
-        <image class="playMode" hidden="{{!(playMode=='singleLoop')}}" src="/image/button/singleLoop.png" ><view class="ripple" style="{{rippleStylePlayMode}}" ></view></image>
-        <image class="playMode" hidden="{{!(playMode=='random')}}" src="/image/button/random.png" ><view class="ripple" style="{{rippleStylePlayMode}}" ></view></image>
+        <view  class="playMode" bindtap='setPlayMode'  bindtouchstart='ripple' data-image="playMode">
+        <image class="playMode1" hidden="{{!(playMode=='listLoop')}}" src="/image/button/listLoop.png" > </image>
+        <image class="playMode1" hidden="{{!(playMode=='singleLoop')}}" src="/image/button/singleLoop.png" > </image>
+        <image class="playMode1" hidden="{{!(playMode=='random')}}" src="/image/button/random.png" > </image>
         </view>
 
-    
-    <!-- <image class='playMode' src='/image/button/circle.png' bindtap=''></image> -->
     <image class='previous' src='/image/button/previous.png' bindtap='previous' bindtouchstart='ripple'  data-image="previous"><view class="ripple" style="{{rippleStyleprevious}}" ></view></image>
-    <image class='playOrPause' src="{{flag==1?'/image/button/pause.png':'/image/button/play.png'}}" bindtap='playOrPause' bindtouchstart='ripple'  data-image="playOrPause">
-    <view class="ripple" style="{{rippleStyleplayOrPause}}" ></view></image>
-    <image class='next' src='/image/button/next.png'   bindtap='next' bindtouchstart='ripple'  data-image="next"><view class="ripple" style="{{rippleStylenext}}" ></view></image>
-    <image class='more' src='/image/button/more.png' bindtap='setDown' bindtouchstart='ripple'  data-image="more"><view class="ripple" style="{{rippleStylemore}}" ></view></image>
+    <image class='playOrPause' src="{{flag==1?'/image/button/pause.png':'/image/button/play.png'}}" bindtap='playOrPause' bindtouchstart='ripple'  data-image="playOrPause"></image>
+    <image class='next' src='/image/button/next.png'   bindtap='next' bindtouchstart='ripple'  data-image="next"></image>
+    <image class='comment' src='/image/button/comment.png' bindtap='comment' bindtouchstart='ripple'  data-image="comment"></image>
+
   </view>
 
       <!-- 专辑 -->
@@ -49,7 +48,20 @@
       <view class='view-background'>
         <image class='image-background2' src='{{song.al.picUrl}}' mode='bottom'></image>
       </view>
-      <view class='collect' bindtap='collect'>
+      <view class='collect' bindtap='collect' bindtouchstart='ripple'  data-image="collect" >
         <image class='collection' src="{{collected==1?'/image/button/collected.png':'/image/button/collect.png'}}"></image>
       </view>
+      
 </view>
+
+<!-- 涟漪 -->
+<view class='lianyi'>
+<view class="ripple" style="{{rippleStyleSlider}}" ></view>
+<view class="ripple" style="{{rippleStylePlayMode}}" ></view>
+<view class="ripple" style="{{rippleStyleplayOrPause}}" ></view>
+<view class="ripple" style="{{rippleStylenext}}" ></view>
+<view class="ripple" style="{{rippleStyleComment}}" ></view>
+<view class="ripple" style="{{rippleStyleCollect}}" ></view>
+</view>
+
+

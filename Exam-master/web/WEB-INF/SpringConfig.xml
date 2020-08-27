@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--数据库连接配置-->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/exam"/>
+        <property name="username" value="root"/>
+        <property name="password" value="123456"/>
+    </bean>
+
+    <!--配置sqlSession 对象工厂类-->
+    <bean id="sessionFaction" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">
+                    org.hibernate.dialect.MySQLDialect
+                </prop>
+                <prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/exam</prop>
+                <prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>
+            </props>
+        </property>
+        <property name="mappingResources">
+            <list>
+                <value>vo/UserEntity.hbm.xml</value>
+                <value>vo/StudentEntity.hbm.xml</value>
+                <value>vo/ExamineEntity.hbm.xml</value>
+                <value>vo/DepartmentEntity.hbm.xml</value>
+                <value>vo/ExamEntity.hbm.xml</value>
+                <value>vo/SignupEntity.hbm.xml</value>
+                <value>vo/NoticeEntity.hbm.xml</value>
+                <value>vo/CategoryEntity.hbm.xml</value>
+                <value>vo/StudentsignupEntity.hbm.xml</value>
+            </list>
+        </property>
+        <property name="annotatedClasses">
+            <list>
+
+                <value>vo.StudentEntity</value>
+                <value>vo.ExamineEntity</value>
+                <value>vo.DepartmentEntity</value>
+                <value>vo.ExamEntity</value>
+                <value>vo.SignupEntity</value>
+                <value>vo.NoticeEntity</value>
+                <value>vo.CategoryEntity</value>
+                <value>vo.UserEntity</value>
+                <value>vo.StudentsignupEntity</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--DAO层-->
+    <bean id="baseDAO" class="dao.BaseDAO">
+        <property name="sessionFactory" ref="sessionFaction"/>
+    </bean>
+
+    <bean id="userDAO" class="dao.impl.UserDAO" parent="baseDAO">
+    </bean>
+
+    <bean id="studentDAO" class="dao.impl.StudentDAO" parent="baseDAO"/>
+
+    <bean id="examineDAO" class="dao.impl.ExamineDAO" parent="baseDAO"/>
+
+    <bean id="departmentDAO" class="dao.impl.DepartMentDAO" parent="baseDAO"/>
+
+    <bean id="examDAO" class="dao.impl.ExamDAO" parent="baseDAO"/>
+
+    <bean id="categoryDAO" class="dao.impl.CategoryDAO" parent="baseDAO"/>
+
+    <bean id="signUpDAO" class="dao.impl.SignUpDAO" parent="baseDAO"/>
+
+    <bean id="studentSignUpDAO" class="dao.impl.StudentSignUpDAO" parent="baseDAO"/>
+
+    <bean id="noticeDAO" class="dao.impl.NoticeDAO" parent="baseDAO"/>
+
+    <!--Service层-->
+
+    <bean id="userService" class="service.impl.UserService">
+        <property name="userDAO" ref="userDAO"/>
+    </bean>
+
+    <bean id="studentService" class="service.impl.StudentService">
+        <property name="studentDAO" ref="studentDAO"/>
+    </bean>
+
+    <bean id="examineService" class="service.impl.ExamineService">
+        <property name="examineDAO" ref="examineDAO"/>
+    </bean>
+
+    <bean id="departmentService" class="service.impl.DepartmentService">
+        <property name="departmentDAO" ref="departmentDAO"/>
+    </bean>
+
+    <bean id="examService" class="service.impl.ExamService">
+        <property name="examDAO" ref="examDAO"/>
+    </bean>
+
+    <bean id="categoryService" class="service.impl.CategoryService">
+        <property name="categoryDAO" ref="categoryDAO"/>
+    </bean>
+
+    <bean id="signUpService" class="service.impl.SignUpService">
+        <property name="signUpDAO" ref="signUpDAO"/>
+    </bean>
+
+    <bean id="studentSignUpService" class="service.impl.StudentSignUpService">
+        <property name="studentSignUpDAO" ref="studentSignUpDAO"/>
+    </bean>
+
+    <bean id="noticeService" class="service.impl.NoticeService">
+        <property name="noticeDAO" ref="noticeDAO"/>
+    </bean>
+
+    <!--Action层-->
+
+    <bean id="userAction" class="action.UserAction">
+        <property name="userService" ref="userService"/>
+    </bean>
+
+    <bean id="studentAction" class="action.StudentAction">
+        <property name="studentService" ref="studentService"/>
+        <property name="examineService" ref="examineService"/>
+    </bean>
+
+    <bean id="examineAction" class="action.ExamineAction">
+        <property name="examineService" ref="examineService"/>
+        <property name="userService" ref="userService"/>
+    </bean>
+
+    <bean id="departmentAction" class="action.DepartmentAction">
+        <property name="departmentService" ref="departmentService"/>
+        <property name="examineService" ref="examineService"/>
+    </bean>
+
+    <bean id="examAction" class="action.ExamAction">
+        <property name="examService" ref="examService"/>
+    </bean>
+
+    <bean id="categoryAction" class="action.CategoryAction">
+        <property name="categoryService" ref="categoryService"/>
+    </bean>
+
+    <bean id="signUpAction" class="action.SignUpAction">
+        <property name="signUpService" ref="signUpService"/>
+        <property name="examService" ref="examService"/>
+    </bean>
+
+    <bean id="studentSignUpAction" class="action.StudentSignUpAction">
+        <property name="studentSignUpService" ref="studentSignUpService"/>
+    </bean>
+
+    <bean id="noticeAction" class="action.NoticeAction">
+        <property name="noticeService" ref="noticeService"/>
+    </bean>
+
+</beans>

@@ -11,3 +11,7 @@
     <view>{{item.ar[0].name}}</view>
   </view>
 </view>
+
+<view>
+    <image class="play" src="/image/button/curSong.png" catchtap="goPlay" ></image>
+</view>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+    <package name="struts2" extends="struts-default">
+
+        <!--用户登陆-->
+        <action name="login" class="userAction" method="login">
+            <result name="success">page_index_admin.jsp</result>
+            <result name="stu_success" type="chain">showAllNoticeToStu</result>
+            <result name="depart_success">depart_page_index.jsp</result>
+            <result name="error">error.jsp</result>
+        </action>
+
+        <!--注销用户-->
+        <action name="loginOut" class="userAction" method="loginout">
+            <result name="success">page_login.jsp</result>
+        </action>
+
+        <!--修改密码-->
+        <action name="updatePassword" class="userAction" method="updatePassword">
+            <result name="success">addSuccess.jsp</result>
+        </action>
+
+        <!--学生注册-->
+        <action name="stuRegister" class="studentAction" method="apply">
+            <result name="success">page_regSuccess.jsp</result>
+            <result name="error">error.jsp</result>
+        </action>
+
+
+        <!--学生审核-->
+        <action name="setExStatus" class="examineAction" method="setStuExStatus">
+            <result name="success" type="chain">showAllNoRegStu</result>
+            <result name="error">error.jsp</result>
+        </action>
+
+        <!--显示所有待审核学生信息-->
+        <action name="showAllNoRegStu" class="examineAction" method="queryAllStuToBeAudited">
+            <result name="success">page_StuToBeAudited.jsp</result>
+        </action>
+
+        <!--显示所有待审核组织部门人员信息-->
+        <action name="showAllNoRegDepart" class="examineAction" method="queryAllDepartToBeAudited">
+            <result name="success">page_DepartToBeAudited.jsp</result>
+        </action>
+
+        <!--组织部门人员注册-->
+        <action name="departmentRegister" class="departmentAction" method="addDepartment">
+            <result name="success">page_regSuccess.jsp</result>
+            <result name="error">error.jsp</result>
+        </action>
+
+        <!--组织部门人员审核-->
+        <action name="setDepartExStatus" class="examineAction" method="setDepartExStatus">
+            <result name="success" type="chain">showAllNoRegDepart</result>
+            <result name="error">error.jsp</result>
+        </action>
+
+        <!--显示所有已注册学生信息-->
+        <action name="showAllRegStu" class="studentAction" method="showAllRegStu">
+            <result name="success">page_StuMangement.jsp</result>
+        </action>
+
+        <!--删除学生信息-->
+        <action name="deleteStu" class="studentAction" method="removeStu">
+            <result name="success" type="chain">showAllRegStu</result>
+            <result name="error">error.jsp</result>
+        </action>
+
+        <!--显示所有已注册组织人员信息-->
+        <action name="showAllRegDepart" class="departmentAction" method="queryAllRegDepart">
+            <result name="success">page_DepartMangement.jsp</result>
+        </action>
+
+        <!--删除组织人员信息-->
+        <action name="deleteDepart" class="departmentAction" method="removeDepart">
+            <result name="success" type="chain">showAllRegDepart</result>
+            <result name="error">error.jsp</result>
+        </action>
+
+        <!--新增考试信息-->
+        <action name="addExam" class="examAction" method="addExam">
+            <result name="success">addSuccess.jsp</result>
+            <result name="error">error.jsp</result>
+        </action>
+
+        <!--新增考试类别信息-->
+        <action name="addExamCategory" class="categoryAction" method="addCategory">
+            <result name="success">addSuccess.jsp</result>
+            <result name="error">error.jsp</result>
+        </action>
+
+        <!--显示所有考试类别-->
+        <action name="showAllCategory" class="categoryAction" method="queryAllCategory">
+            <result name="success">page_addExam.jsp</result>
+            <result name="error">error.jsp</result>
+        </action>
+
+        <!--发布报名信息-->
+        <action name="seleteOneExam" class="examAction" method="queryOneExam">
+            <result name="success">page_addSignUp.jsp</result>
+            <result name="error">error.jsp</result>
+        </action>
+        <action name="addSignUp" class="signUpAction" method="addSignUp">
+            <result name="success">addSuccess.jsp</result>
+            <result name="error">error.jsp</result>
+        </action>
+
+        <!--显示所有考试信息-->
+        <action name="showAllExam" class="examAction" method="showAllExamName">
+            <result name="success">page_ExamToRelease.jsp</result>
+        </action>
+
+        <!--&lt;!&ndash;显示所有可报名考试&ndash;&gt;-->
+        <!--<action name="showAllSignUp" class="signUpAction" method="showAllToBeSignUp">-->
+            <!--<result name="success">page_ExamToRelease.jsp</result>-->
+        <!--</action>-->
+
+
+
+        <!--删除考试信息-->
+        <action name="deleteExam" class="examAction" method="deleteExam">
+            <result name="success">page_ExamToRelease.jsp</result>
+            <result name="error">error.jsp</result>
+        </action>
+
+        <!--显示所有已发布的考试信息-->
+        <action name="showAllSignUpInfo" class="signUpAction" method="showAllSignUp">
+            <result name="success">page_SignUpMangement.jsp</result>
+        </action>
+
+        <!--学生选择考试报名-->
+        <action name="stuSeleteSignUp" class="studentSignUpAction" method="selectSignUp">
+            <result name="success" type="chain">showAllSignUpInfoToStu</result>
+            <result name="error">error.jsp</result>
+        </action>
+
+        <!--学生端查看报名信息-->
+        <action name="showAllSignUpInfoToStu" class="signUpAction" method="showAllSignUp">
+            <result name="success">stu_page_selectSignUp.jsp</result>
+        </action>
+
+        <!--发布公告-->
+        <action name="addNotice" class="noticeAction" method="addNotice">
+            <result name="success">addSuccess.jsp</result>
+            <result name="error">error.jsp</result>
+        </action>
+
+        <!--删除公告-->
+        <action name="removeNotice" class="noticeAction" method="removeNotice">
+            <result name="success" type="chain">showAllNotice</result>
+            <result name="error">error.jsp</result>
+        </action>
+
+        <!--查询所有公告-->
+        <action name="showAllNotice" class="noticeAction" method="queryAllNotice">
+            <result name="success">page_NoticeManagement.jsp</result>
+        </action>
+
+        <!--查看某项考试报名的学生信息-->
+        <action name="showAllSignUpHaveStu" class="studentSignUpAction" method="queryStuToSignUp">
+            <result name="success">page_SignUpHaveStu.jsp</result>
+        </action>
+
+        <!--学生端查看所有公告-->
+        <action name="showAllNoticeToStu" class="noticeAction" method="queryAllNotice">
+            <result name="success">stu_page_showNotice.jsp</result>
+        </action>
+
+        <!--学生端查询具体公告内容-->
+        <action name="showNoticeAboutToStu" class="noticeAction" method="queryNoticeAbout">
+            <result name="success">stu_page_showNoticeAbout.jsp</result>
+        </action>
+
+        <!--查询具体公告内容-->
+        <action name="showNoticeAbout" class="noticeAction" method="queryNoticeAbout">
+            <result name="success">page_showNotice.jsp</result>
+        </action>
+
+        <!--学生端查看已报名考试-->
+        <action name="showSignUpExamToStu" class="studentSignUpAction" method="StuQuerySignUp">
+            <result name="success">stu_page_showSignUpExam.jsp</result>
+        </action>
+    </package>
+</struts>

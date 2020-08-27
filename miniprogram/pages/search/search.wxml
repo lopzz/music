@@ -5,7 +5,7 @@
 </view>
 <!-- 输入框 -->
 <view class='wrap'>
-  <input class='input' bindinput='bindinput' bindfocus='bindfocus' bindblur='bindblur'confirm-type='search' bindconfirm='bindconfirm'></input>
+  <input class='input' bindinput='bindinput' bindfocus='bindfocus' bindblur='bindblur'confirm-type='search' bindconfirm='bindconfirm' value='{{hotSearch}}'></input>
   <view class='view-search'style="background-color:{{isSearch?'rgb(154, 84, 120)':'white'}}">
     <image class='image-search'src="{{isSearch?'/image/search/searching.png':'/image/search/search.png'}}"bindtap='tapSearch'></image>
   </view>
@@ -21,3 +21,8 @@
     <view class='singer'>{{item.artists[0].name}}</view>
   </view>
 </view>
+
+<view>
+    <image class="play" src="/image/button/curSong.png" catchtap="goPlay" ></image>
+</view>
+

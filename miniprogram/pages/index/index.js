@@ -1,23 +1,28 @@
-var dataObj = require('../../data/data.js');
-// var util = require('../../util/util.js')
-import {util} from '../../util/util.js';
 
 var app = getApp();
-
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad: function (options) {
-
+    const db = wx.cloud.database();
+    var that = this;
+    db.collection('musics').where({
+      _openid: 'user-open-id'
+    })
+      .get({
+        success: function (res) {
+          // res.data 是包含记录的数组
+          // console.log(res.data)
+          var list = res.data;
+          that.setData({
+            list: list
+          })
+          app.globalData.list = list
+          console.log("全局变量的list数组:")
+          console.log(app.globalData.list)
+        }
+      })
   },
 
 
@@ -58,7 +63,24 @@ Page({
         console.log("fail")
       }
     })
-  }
+  },
+
+  goPlay() {
+    var index = app.globalData.index;
+    // console.log("索引啊！！！" + index)
+    wx.navigateTo({
+      url: '../play/play?index=' + index,
+      success: function () {
+        console.log("success")
+      },
+      fail: function () {
+        console.log("fail")
+      }
+    })
+  },
+  
+
+
 })
 
  

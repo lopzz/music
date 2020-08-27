@@ -1,0 +1,18 @@
+<!-- 背景图 -->
+<view>
+  <image class="background" src="https://6c69-li-1257993047.tcb.qcloud.la/image/index/background.png?sign=f27b4dd1d7ac5b2e9babd25acbf01772&t=1541493678"></image>
+</view>
+<view class='container'>
+  <!-- 头像 -->
+  <view class='avatar'>
+    <image src='{{avatarUrl}}'></image>
+  </view>
+  <!-- 授权按钮 -->
+  <view class='button'>
+    <button 
+    color='red'
+    open-type="getUserInfo" 
+    bindgetuserinfo="onGetUserInfo"
+    >进入音乐小程序</button>
+  </view>
+</view>

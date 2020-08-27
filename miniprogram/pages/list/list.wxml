@@ -10,3 +10,11 @@
     <view>{{item.arName}}</view>
   </view>
 </view>
+
+<view wx:if="{{isNull}}" class='tip'>
+  <text>当前没有歌曲在列表中~</text>
+</view>
+
+<view>
+<image class="play" src="/image/button/curSong.png" catchtap="goPlay" ></image>
+</view>

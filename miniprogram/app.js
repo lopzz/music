@@ -12,22 +12,11 @@ App({
   },
 
   globalData: {
-    userInfo: null,
     song: null,//音频上下文
-    list: null,
-    flag: 1,
-    playMode: 'listLoop'
+    list: null, //存放歌曲
+    flag: 1,  //默认进来play页面是播放的
+    playMode: 'listLoop',
+    index:0   //记录播放到第几首；直接进蓝圈默认进第0首
   },
-  judgeDirection() {
-    var direction = this.data.direction;
-    if (direction == "up") {
-      this.playOrPause();
-    } else if (direction == "down") {
-      this.stop();
-    } else if (direction == "left") {
-      this.previous();
-    } else if (direction == "right") {
-      this.next();
-    }
-  },
+
 })

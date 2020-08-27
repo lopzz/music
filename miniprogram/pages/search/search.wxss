@@ -14,6 +14,11 @@
   left: 0;
   top:0;
 }
+
+input[value]{ 
+  color: #FC9D99;
+}
+
 .view-search{
   width: 100rpx;
   height: 80rpx;
@@ -62,4 +67,10 @@
   margin-bototm:30rpx;
 }
 
-
+.play{
+  position: fixed;
+  bottom:50rpx;
+  right: 50rpx;
+  width: 150rpx;
+  height: 150rpx;
+}

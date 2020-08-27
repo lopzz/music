@@ -9,13 +9,13 @@ Page({
     current: 0,
     isDown: false,
     lrc: {
-      "0": "正在获取歌词"
+      "0": "正在获取歌词..."
     },
     currentLrc: "",
     //默认进来就播放
     flag:1,
     //播放模式：列表播放、单曲循环、随机播放，默认为列表播放
-    playMode: '',
+    playMode: 'listLoop',
     //播放模式数量
     playModeNum: 3,
     //播放模式三个按钮的下标
@@ -29,21 +29,13 @@ Page({
   onLoad: function (options) {
     var index = parseInt(options.index);
     console.log(index)
+    app.globalData.index = index;
     var id = app.globalData.list[index].id;//在app.globalData的list数组通过index获得id
     var musicList = app.globalData.list
     var flag = app.globalData.flag
     var playMode = app.globalData.playMode
     console.log(musicList);
-    const db = wx.cloud.database()
-    var that=this
-    //查询数据库，当前各歌曲是否被收藏
-    db.collection('musics').doc(''+id).get({
-      success: function (res) {
-        that.setData({
-          collected:res.data.collected
-        })
-      }
-    })
+    
     this.setData({ 
       id:id,
       index: index,
@@ -51,6 +43,7 @@ Page({
       flag:flag,
       playMode:playMode,
      })
+    this.updateCollected();
   
     //获得歌词
     wx.request({
@@ -79,8 +72,8 @@ Page({
         this.setData({
           song: res.data.songs[0]   //点中的歌
         });
-        console.log('asdasdas')
-        console.log(res.data.songs[0])
+        app.globalData.curSong = res.data.songs[0];
+        // console.log(res.data.songs[0])
        wx.setNavigationBarTitle({
           title: res.data.songs[0].name + '-'+res.data.songs[0].ar[0].name//歌名和歌手名
         })
@@ -88,7 +81,7 @@ Page({
     });
     
    var song = app.globalData.song;
-   console.log(song);
+  //  console.log(song);
     if (!song) {
       song = app.globalData.song = wx.createInnerAudioContext();
     }
@@ -109,7 +102,6 @@ Page({
     })
 
     song.onTimeUpdate(res => {
-      // console.log( song );
       if (this.data.duration !== song.duration) {
       this.setData({
           duration: song.duration
@@ -136,7 +128,6 @@ Page({
       song.onEnded(() => {
         console.log("自然播放完");
         var playMode = app.globalData.playMode;
-        // var playMode = this.data.playMode;
         if (playMode == 'listLoop') {//列表循环
           app.globalData.song.loop = false;
           this.next();
@@ -189,6 +180,8 @@ Page({
     }
     let song = app.globalData.song;
     let id = app.globalData.list[i].id;
+    this.setData({id:id})
+    this.updateCollected();
 
     //获得歌词
     wx.request({
@@ -217,14 +210,13 @@ Page({
         this.setData({
           song: res.data.songs[0]   //点中的歌
         });
-        // app.globalData.song = res.data.songs[0]; //把请求的歌存到全局变量
+        app.globalData.curSong = res.data.songs[0];
          wx.setNavigationBarTitle({
           title: res.data.songs[0].name + '-' + res.data.songs[0].ar[0].name//歌名和歌手名
         })
       }
     });
-    
-    console.log(song)
+    // console.log(song)
     song.src = `http://music.163.com/song/media/outer/url?id=${id}.mp3`
     song.pause(); // 先停止 再调用 播放 , 否则有可能更新(onTimeUpdate)不会触发
     song.play();
@@ -235,7 +227,6 @@ Page({
   playOrPause() {
     let song = app.globalData.song;
     if(this.data.flag==0){
-      // song.pause();
       song.play();
       this.setData({ flag: 1 })
       app.globalData.flag = 1;
@@ -252,6 +243,7 @@ Page({
       index: this.data.index-1,
       flag: 1
     });
+    app.globalData.index = this.data.index ;
     app.globalData.flag = 1;
     setTimeout(() => {
       if(app.globalData.playMode=='random'){
@@ -260,7 +252,7 @@ Page({
       else{
       this.myplay();
       }
-    }, 800);//等待一段时间再重新播放
+    }, 500);//等待一段时间再重新播放
     //  console.log('上一首');
   },
 
@@ -271,6 +263,7 @@ Page({
       flag: 1
     });
     app.globalData.flag = 1;
+    app.globalData.index = this.data.index;
     setTimeout(() => {  //等待一段时间再重新播放
       if (app.globalData.playMode == 'random') {
         this.randomPlay();
@@ -278,7 +271,7 @@ Page({
       else {
         this.myplay();
       }
-    }, 800);
+    }, 500);
     // console.log('下一首');
   },
 
@@ -288,10 +281,10 @@ Page({
     var rand = Math.floor(Math.random() * max);
     console.log(rand);
     this.setData({ index: rand });
+    app.globalData.index = rand;
     this.myplay();
   },
 
-  
 
   //设置播放模式playMode
   setPlayMode: function () {
@@ -317,123 +310,98 @@ Page({
 
   //涟漪效果
   ripple: function (res) {
-    console.log(res.touches[0]);
     var img = res.currentTarget.dataset.image;
     console.log(img);
     this.setData({ clickImg: img });
     var that = this;
     //获取点击元素的top和left
-    wx.createSelectorQuery().select('.' + img).boundingClientRect(function (rect) {
+    wx.createSelectorQuery().select('.' + img).boundingClientRect//在CSS中找对应的
+    (function (rect) {
       that.setData({      //这里不能用this.setData,因为this是调用function(rect)的对象
-        rectTop: rect.top,
-        rectLeft: rect.left
+        rectTop: rect.top,//选中的东西的距离屏幕左上的top，单位像素
+        rectLeft: rect.left,//选中的东西的距离屏幕左上的left，单位像素
+        rectWidth: rect.width,   // 节点的宽度，单位像素
+        rectHeight: rect.height  //选中的东西的高度，单位像素
       })
+      // console.log("设置top、left先")
+      //x和y都是像素px 1px=2rpx
+      var x = that.data.rectLeft + (that.data.rectWidth / 2) - 25;
+      //-25是ripple的宽和高是25px
+      var y = that.data.rectTop + (that.data.rectHeight / 2) - 25;
+      //以下是控制按钮的涟漪效果
+      if (img == 'playOrPause') {
+        that.setData({
+          rippleStyleplayOrPause: ''     //每次进来刷新掉rippleStyle
+        })
+        setTimeout(function () {
+          that.setData({
+            rippleStyleplayOrPause: 'top:' + y + 'px;left:' + x + 'px;animation:ripple 0.7s ease-out;'
+          });
+        }, 50)
+      }
+      else if (img == 'previous') {
+        that.setData({
+          rippleStyleprevious: ''     //每次进来刷新掉rippleStyle
+        })
+        setTimeout(function () {
+          that.setData({
+            rippleStyleprevious: 'top:' + y + 'px;left:' + x + 'px;animation:ripple 0.7s ease-out;'
+          });
+        }, 50)
+      }
+      else if (img == 'next') {
+        that.setData({
+          rippleStylenext: ''     //每次进来刷新掉rippleStyle
+        })
+        setTimeout(function () {
+          that.setData({
+            rippleStylenext: 'top:' + y + 'px;left:' + x + 'px;animation:ripple 0.7s ease-out;'
+          });
+        }, 50)
+      }
+      else if (img == 'comment') {
+        that.setData({
+          rippleStyleComment: ''     //每次进来刷新掉rippleStyle
+        })
+        setTimeout(function () {
+          that.setData({
+            rippleStyleComment: 'top:' + y + 'px;left:' + x + 'px;animation:ripple 0.7s ease-out;'
+          });
+        }, 50)
+      }
+      else if (img == 'playMode') {
+        that.setData({
+          rippleStylePlayMode: ''     //每次进来刷新掉rippleStyle
+        })
+        setTimeout(function () {
+          that.setData({
+            rippleStylePlayMode: 'top:' + y + 'px;left:' + x + 'px;animation:ripple 0.7s ease-out;'
+          });
+        }, 50)
+      }
+      else if (img == 'collect') {
+        that.setData({
+          rippleStyleCollect: ''     //每次进来刷新掉rippleStyle
+        })
+        setTimeout(function () {
+          that.setData({
+            rippleStyleCollect: 'top:' + y + 'px;left:' + x + 'px;animation:ripple 0.7s ease-out;'
+          });
+        }, 50)
+      }
+      else if (img == 'slider') {
+        that.setData({
+          rippleStyleSlider: ''     //每次进来刷新掉rippleStyle
+        })
+        setTimeout(function () {
+          that.setData({
+            rippleStyleSlider: 'top:' + y + 'px;left:' + ((that.data.current/that.data.duration)*339+18) + 'px; animation:ripple 0.7s ease-out;'
+          });
+        }, 50)
+      }
     }).exec();
-
-    var x = res.touches[0].pageX - this.data.rectLeft - 100//计算涟漪的位置
-    var y = res.touches[0].pageY - this.data.rectTop - 100;
-    //4个主功能的涟漪效果
-    if (img == 'myMusic') {
-      this.setData({
-        rippleStyle1: ''     //每次进来刷新掉rippleStyle
-      })
-      setTimeout(function () { //不延时不行
-        that.setData({
-          rippleStyle1: 'top:' + y + 'px;left:' + x + 'px;animation:ripple 0.7s ease-out;'
-        });
-      }, 100)
-    } else if (img == 'friendMusic') {
-      this.setData({
-        rippleStyle2: ''     //每次进来刷新掉rippleStyle
-      })
-      setTimeout(function () {
-        that.setData({
-          rippleStyle2: 'top:' + y + 'px;left:' + x + 'px;animation:ripple 0.7s ease-out;'
-        });
-      }, 100)
-    }
-    else if (img == 'settings') {
-      this.setData({
-        rippleStyle3: ''     //每次进来刷新掉rippleStyle
-      })
-      setTimeout(function () {
-        that.setData({
-          rippleStyle3: 'top:' + y + 'px;left:' + x + 'px;animation:ripple 0.7s ease-out;'
-        });
-      }, 100)
-    }
-    else if (img == 'rankList') {
-      this.setData({
-        rippleStyle4: ''     //每次进来刷新掉rippleStyle
-      })
-      setTimeout(function () {
-        that.setData({
-          rippleStyle4: 'top:' + y + 'px;left:' + x + 'px;animation:ripple 0.7s ease-out;'
-        });
-      }, 100)
-    }
-    //以下是控制按钮的涟漪效果
-    else if (img == 'playOrPause') {
-      this.setData({
-        rippleStyleplayOrPause: ''     //每次进来刷新掉rippleStyle
-      })
-      setTimeout(function () {
-        that.setData({
-          rippleStyleplayOrPause: 'top:' + y + 'px;left:' + x + 'px;animation:ripple 0.7s ease-out;'
-        });
-      }, 100)
-    }
-    else if (img == 'previous') {
-      this.setData({
-        rippleStyleprevious: ''     //每次进来刷新掉rippleStyle
-      })
-      setTimeout(function () {
-        that.setData({
-          rippleStyleprevious: 'top:' + y + 'px;left:' + x + 'px;animation:ripple 0.7s ease-out;'
-        });
-      }, 100)
-    }
-    else if (img == 'middle') {
-      this.setData({
-        rippleStyleMiddle: ''     //每次进来刷新掉rippleStyle
-      })
-      setTimeout(function () {
-        that.setData({
-          rippleStyleMiddle: 'top:' + y + 'px;left:' + x + 'px;animation:ripple 0.7s ease-out;'
-        });
-      }, 100)
-    }
-    else if (img == 'next') {
-      this.setData({
-        rippleStylenext: ''     //每次进来刷新掉rippleStyle
-      })
-      setTimeout(function () {
-        that.setData({
-          rippleStylenext: 'top:' + y + 'px;left:' + x + 'px;animation:ripple 0.7s ease-out;'
-        });
-      }, 100)
-    }
-    else if (img == 'more') {
-      this.setData({
-        rippleStylemore: ''     //每次进来刷新掉rippleStyle
-      })
-      setTimeout(function () {
-        that.setData({
-          rippleStylemore: 'top:' + y + 'px;left:' + x + 'px;animation:ripple 0.7s ease-out;'
-        });
-      }, 100)
-    }
-    else if (img == 'set-mode') {
-      this.setData({
-        rippleStylePlayMode: ''     //每次进来刷新掉rippleStyle
-      })
-      setTimeout(function () {
-        that.setData({
-          rippleStylePlayMode: 'top:' + y + 'px;left:' + x + 'px;animation:ripple 0.7s ease-out;'
-        });
-      }, 100)
-    }
   },
+
   //收藏
   collect:function(){
     const db = wx.cloud.database()
@@ -463,5 +431,42 @@ Page({
         }
       })
     }
+  },
+
+  comment:function(){
+    // console.log(this.data.song.al.picUrl)
+    var that = this;
+    wx.navigateTo({
+      // url: '/pages/comment/comment?id=' + this.data.id + '&pic=' + that.data.song.al.picUrl,
+      url: '/pages/comment/comment?song1=' + JSON.stringify(that.data.song) ,
+    })
+  },
+
+    updateCollected:function(){
+    const db = wx.cloud.database()
+    var that=this
+    //查询数据库，当前各歌曲是否被收藏
+    db.collection('musics').doc(''+this.data.id).get({
+      success: function (res) {
+        console.log("成功查询数据库成功是收藏")
+        // console.log(res)
+        that.setData({
+          collected:res.data.collected
+        })
+      },
+      fail:function(){
+        console.log("查询失败没有收藏")
+        that.setData({
+          collected:0
+        })
+      }
+    })
+    },
+
+mouse(e) {     
+  var x = e.touches[0].pageX;
+  var y = e.touches[0].pageY;
+  console.log("横坐标是"+x+"   纵坐标是"+y)
   }
+
 })

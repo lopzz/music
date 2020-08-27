@@ -44,3 +44,11 @@ page{
   height: 280rpx;
   border-radius: 50%;
 }
+
+.play{
+  position: fixed;
+  bottom:50rpx;
+  right: 50rpx;
+  width: 150rpx;
+  height: 150rpx;
+}

@@ -1,3 +1,4 @@
+var app = getApp();
 
 Page({
   data: {
@@ -9,10 +10,8 @@ Page({
       { "4": '云音乐电音榜' },
       { "5": 'UK排行榜周榜' },
       { "6": '美国Billboard周榜' },
-      { "7": 'KTV嗨榜' },
-   
+      { "7": 'KTV唛榜' },
 
-      
     ]
   },
   onLoad: function (options) {
@@ -26,5 +25,19 @@ Page({
     wx.navigateTo({
       url: '/pages/rankList/rankList?id=' + id + "&type=" + this.data.type[id][id],
     })
+  },
+
+  goPlay() {
+    var index = app.globalData.index;
+    wx.navigateTo({
+      url: '../play/play?index=' + index,
+      success: function () {
+        console.log("success")
+      },
+      fail: function () {
+        console.log("fail")
+      }
+    })
   }
+
 })
